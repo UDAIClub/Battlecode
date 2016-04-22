@@ -1,37 +1,39 @@
 package firstattempt;
 
+import java.util.Random;
+
 import battlecode.common.*;
 
 public class RobotPlayer {
+	static Direction[] directions = {Direction.NORTH, Direction.NORTH_EAST, Direction.EAST, Direction.SOUTH_EAST,
+            Direction.SOUTH, Direction.SOUTH_WEST, Direction.WEST, Direction.NORTH_WEST};
+    static RobotType[] robotTypes = {RobotType.SCOUT, RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+            RobotType.GUARD, RobotType.GUARD, RobotType.VIPER, RobotType.TURRET};
+    static Random rand;
+    
 	public static void run(RobotController rc){
-		if (rc.getType() == RobotType.ARCHON){
-			RobotInfo[] nearby = rc.senseNearbyRobots(1);
-			Boolean[][] bordering = new Boolean[3][3];
-			MapLocation myLocation = rc.getLocation();
-			for (RobotInfo robot: nearby){
-				int relativeX = (robot.location.x - myLocation.x + 1);
-				int relativeY = (robot.location.y - myLocation.y - 1);
-				bordering[relativeX][relativeY] = true;
-			}
-		}
+		
+        rand = new Random(rc.getID());
+        
+		
 		
 		while(true){
 			switch (rc.getType()) {
-			case ARCHON: archonMethod();
+			case ARCHON: archonMethod(rc);
 				break;
-			case GUARD: guardMethod();
+			case GUARD: guardMethod(rc);
 				break;
-			case SCOUT: scoutMethod();
+			case SCOUT: scoutMethod(rc);
 				break;
-			case SOLDIER: soldierMethod();
+			case SOLDIER: soldierMethod(rc);
 				break;
-			case TURRET: turretMethod();
+			case TURRET: turretMethod(rc);
 				break;
-			case TTM: ttmMethod();
+			case TTM: ttmMethod(rc);
 				break;
-			case VIPER: viperMethod();
+			case VIPER: viperMethod(rc);
 				break;
-			default: soldierMethod();
+			default: soldierMethod(rc);
 				break;
 			}
 			
@@ -39,8 +41,23 @@ public class RobotPlayer {
 		}
 		
 	}
-	public static void archonMethod(){
+	public static void archonMethod(RobotController rc){
 	    try {
+	    	if (rc.getType() == RobotType.ARCHON){
+				int fate = rand.nextInt(1000);
+				RobotType typeToBuild = robotTypes[fate % 8];
+				Direction dirToBuild = directions[rand.nextInt(8)];
+				for (int i = 0; i < 8; i++) {
+	                // If possible, build in this direction
+	                if (rc.canBuild(dirToBuild, typeToBuild)) {
+	                    rc.build(dirToBuild, typeToBuild);
+	                    break;
+	                } else {
+	                    // Rotate the direction to try
+	                    dirToBuild = dirToBuild.rotateLeft();
+	                }
+				}
+			}
 	
 	    } catch (Exception e) {
 	      System.out.println(e.getMessage());
@@ -48,22 +65,22 @@ public class RobotPlayer {
 	    }
 		
 	}
-	public static void guardMethod(){
+	public static void guardMethod(RobotController rc){
 		
 	}
-	public static void scoutMethod(){
+	public static void scoutMethod(RobotController rc){
 		
 	}
-	public static void soldierMethod(){
+	public static void soldierMethod(RobotController rc){
 		
 	}
-	public static void turretMethod(){
+	public static void turretMethod(RobotController rc){
 		
 	}
-	public static void ttmMethod(){
+	public static void ttmMethod(RobotController rc){
 		
 	}
-	public static void viperMethod(){
+	public static void viperMethod(RobotController rc){
 		
 	}
 }
