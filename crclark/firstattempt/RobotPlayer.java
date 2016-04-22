@@ -7,13 +7,11 @@ public class RobotPlayer {
 		if (rc.getType() == RobotType.ARCHON){
 			RobotInfo[] nearby = rc.senseNearbyRobots(1);
 			Boolean[][] bordering = new Boolean[3][3];
+			MapLocation myLocation = rc.getLocation();
 			for (RobotInfo robot: nearby){
-				if (robot.location.x == rc.getLocation().x){
-					
-				}
-				if (robot.location.y == rc.getLocation().y){
-					
-				}
+				int relativeX = (robot.location.x - myLocation.x + 1);
+				int relativeY = (robot.location.y - myLocation.y - 1);
+				bordering[relativeX][relativeY] = true;
 			}
 		}
 		
