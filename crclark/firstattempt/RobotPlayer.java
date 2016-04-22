@@ -40,12 +40,12 @@ public class RobotPlayer {
 		
 	}
 	public static void archonMethod(){
-    try {
-
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-      e.printStackTrace();
-    }
+	    try {
+	
+	    } catch (Exception e) {
+	      System.out.println(e.getMessage());
+	      e.printStackTrace();
+	    }
 		
 	}
 	public static void guardMethod(){
