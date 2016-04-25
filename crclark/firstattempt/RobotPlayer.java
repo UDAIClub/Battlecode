@@ -50,22 +50,22 @@ public class RobotPlayer {
   }
   public static void archonMethod(RobotController rc){
     try {
-	  	if(rc.isCoreReady()){
-		      int fate = rand.nextInt(1000);
-		      RobotType typeToBuild = robotTypes[2];
-		      Direction dirToBuild = directions[rand.nextInt(8)];
-		      for (int i = 0; i < 8; i++) {
-		        // If possible, build in this direction
-		        if (rc.canBuild(dirToBuild, typeToBuild)) {
-		          rc.build(dirToBuild, typeToBuild);
-		          break;
-		        } else {
-		          // Rotate the direction to try
-		          dirToBuild = dirToBuild.rotateLeft();
-		        }
-		      }
-	  	}
-
+	if(rc.isCoreReady()){
+	    int fate = rand.nextInt(1000);
+	    RobotType typeToBuild = robotTypes[2];
+	    Direction dirToBuild = directions[rand.nextInt(8)];
+	    for (int i = 0; i < 8; i++) {
+		// If possible, build in this direction
+		if (rc.canBuild(dirToBuild, typeToBuild)) {
+		    rc.build(dirToBuild, typeToBuild);
+		    break;
+		} else {
+		    // Rotate the direction to try
+		    dirToBuild = dirToBuild.rotateLeft();
+		}
+	    }
+	}
+	
     } catch (Exception e) {
       System.out.println(e.getMessage());
       e.printStackTrace();
