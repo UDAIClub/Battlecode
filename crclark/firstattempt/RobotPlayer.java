@@ -1,4 +1,4 @@
-package firstattempt;
+package crclark.firstattempt;
 
 import java.util.Random;
 
@@ -18,10 +18,13 @@ public class RobotPlayer {
     Team myTeam = rc.getTeam();
     Team enemyTeam = myTeam.opponent();
     rand = new Random(rc.getID());
+    
 
 
 
     while(true){
+    	System.out.println("My Team: " + myTeam);
+    	System.out.println("Enemy Team: "+ enemyTeam);
       switch (rc.getType()) {
         case ARCHON: archonMethod(rc);
                      break;
@@ -47,21 +50,21 @@ public class RobotPlayer {
   }
   public static void archonMethod(RobotController rc){
     try {
-      if (rc.getType() == RobotType.ARCHON){
-        int fate = rand.nextInt(1000);
-        RobotType typeToBuild = robotTypes[2];
-        Direction dirToBuild = directions[rand.nextInt(8)];
-        for (int i = 0; i < 8; i++) {
-          // If possible, build in this direction
-          if (rc.canBuild(dirToBuild, typeToBuild)) {
-            rc.build(dirToBuild, typeToBuild);
-            break;
-          } else {
-            // Rotate the direction to try
-            dirToBuild = dirToBuild.rotateLeft();
-          }
-        }
-      }
+	  	if(rc.isCoreReady()){
+		      int fate = rand.nextInt(1000);
+		      RobotType typeToBuild = robotTypes[2];
+		      Direction dirToBuild = directions[rand.nextInt(8)];
+		      for (int i = 0; i < 8; i++) {
+		        // If possible, build in this direction
+		        if (rc.canBuild(dirToBuild, typeToBuild)) {
+		          rc.build(dirToBuild, typeToBuild);
+		          break;
+		        } else {
+		          // Rotate the direction to try
+		          dirToBuild = dirToBuild.rotateLeft();
+		        }
+		      }
+	  	}
 
     } catch (Exception e) {
       System.out.println(e.getMessage());
@@ -80,22 +83,30 @@ public class RobotPlayer {
       int myAttackRange = rc.getType().attackRadiusSquared; 
       int fate = rand.nextInt(1000);
       boolean shouldAttack = false;
+      RobotInfo target;
 
       // If this robot type can attack, check for enemies within range and attack one
       if (myAttackRange > 0) {
         RobotInfo[] enemiesWithinRange = rc.senseNearbyRobots(myAttackRange, enemyTeam);
         RobotInfo[] zombiesWithinRange = rc.senseNearbyRobots(myAttackRange, Team.ZOMBIE);
-        if (enemiesWithinRange.length > 0) {
+        RobotInfo[] hostilesWithinRange = rc.senseHostileRobots(rc.getLocation(), myAttackRange);
+        if (hostilesWithinRange.length > 0){
           shouldAttack = true;
-          // Check if weapon is ready
-          if (rc.isWeaponReady()) {
-            rc.attackLocation(enemiesWithinRange[rand.nextInt(enemiesWithinRange.length)].location);
-          }
-        } else if (zombiesWithinRange.length > 0) {
-          shouldAttack = true;
-          // Check if weapon is ready
-          if (rc.isWeaponReady()) {
-            rc.attackLocation(zombiesWithinRange[rand.nextInt(zombiesWithinRange.length)].location);
+          if (rc.isCoreReady()){
+          	//Check if weapon is ready
+	        if (enemiesWithinRange.length > 0) {
+	          shouldAttack = true;
+	          // Check if weapon is ready
+	          if (rc.isWeaponReady()) {
+	            rc.attackLocation(enemiesWithinRange[rand.nextInt(enemiesWithinRange.length)].location);
+	          }
+	        } else if (zombiesWithinRange.length > 0) {
+	          shouldAttack = true;
+	          // Check if weapon is ready
+	          if (rc.isWeaponReady()) {
+	            rc.attackLocation(zombiesWithinRange[rand.nextInt(zombiesWithinRange.length)].location);
+	          }
+          	}
           }
         }
       }
